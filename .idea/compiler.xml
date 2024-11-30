@@ -8,9 +8,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="SEULibApp (1)" />
-        <module name="SEULibApp" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="SEULibApp" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
