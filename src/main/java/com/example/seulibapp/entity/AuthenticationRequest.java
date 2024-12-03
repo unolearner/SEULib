@@ -1,4 +1,4 @@
-package com.example.app01.entity;
+package com.example.seulibapp.entity;
 
 import java.io.Serializable;
 
