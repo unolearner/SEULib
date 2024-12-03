@@ -1,9 +1,9 @@
-package com.example.app01.controller;
+package com.example.seulibapp.controller;
 
-import com.example.app01.entity.AuthenticationRequest;
-import com.example.app01.entity.AuthenticationResponse;
-//import com.example.app01.service.RedisService;
-import com.example.app01.util.JwtUtil;
+import com.example.seulibapp.entity.AuthenticationRequest;
+import com.example.seulibapp.entity.AuthenticationResponse;
+//import com.example.seulibapp.service.MemcacheService;
+import com.example.seulibapp.util.JwtUtil;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticateController {
 
 //    @Resource
-//    private RedisService service;
+//    private MemcacheService service;
 
     @Resource
     private AuthenticationManager authenticationManager;
