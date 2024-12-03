@@ -1,9 +1,9 @@
 package com.example.seulibapp.entity;
 
 
-import lombok.Getter;
+import lombok.Data;
 
-
+@Data
 public class User {
     //用户id 主键
     private String id;

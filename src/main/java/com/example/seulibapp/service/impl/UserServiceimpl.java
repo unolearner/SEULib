@@ -2,6 +2,7 @@ package com.example.seulibapp.service.impl;
 
 import com.example.seulibapp.dao.UserDao;
 import com.example.seulibapp.entity.User;
+import com.example.seulibapp.service.MemcacheService;
 import com.example.seulibapp.service.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Scope;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @Transactional
@@ -16,6 +18,9 @@ import java.util.List;
 public class UserServiceimpl implements UserService {
     @Resource
     private UserDao userDao;
+
+    @Resource
+    private  MemcacheService memcacheService;
 
     @Override
     public List<User>getUserList(){
@@ -43,7 +48,9 @@ public class UserServiceimpl implements UserService {
     }
 
     @Override
-    public int updateUser(User user) {
+    public int updateUser(User user) throws ExecutionException, InterruptedException {
+
+        memcacheService.addToCache(user.getUserName(), 3600, user.toString());
         return userDao.updateUser(user);
     }
 
