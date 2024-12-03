@@ -1,4 +1,4 @@
-package com.example.app01.util;
+package com.example.seulibapp.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
