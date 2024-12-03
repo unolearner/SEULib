@@ -1,6 +1,6 @@
-package com.example.app01.filter;
+package com.example.seulibapp.filter;
 
-import com.example.app01.util.JwtUtil;
+import com.example.seulibapp.util.JwtUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
