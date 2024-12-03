@@ -1,7 +1,7 @@
-package com.example.app01.service.impl;
+package com.example.seulibapp.service.impl;
 
-import com.example.app01.dao.UserDao;
-import com.example.app01.entity.User;
+import com.example.seulibapp.dao.UserDao;
+import com.example.seulibapp.entity.User;
 import jakarta.annotation.Resource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
