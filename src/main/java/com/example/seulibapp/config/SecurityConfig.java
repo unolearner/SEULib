@@ -1,7 +1,7 @@
-package com.example.app01.config;
+package com.example.seulibapp.config;
 
-import com.example.app01.filter.JwtRequestFilter;
-import com.example.app01.util.JwtUtil;
+import com.example.seulibapp.filter.JwtRequestFilter;
+import com.example.seulibapp.util.JwtUtil;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
