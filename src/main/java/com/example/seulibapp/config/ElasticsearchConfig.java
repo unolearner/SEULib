@@ -10,7 +10,7 @@ import org.elasticsearch.client.RestClient;
 
 
 @Configuration
-public class gitElasticsearchConfig {
+public class ElasticsearchConfig {
 
     @Bean
     public RestClient restClient() {

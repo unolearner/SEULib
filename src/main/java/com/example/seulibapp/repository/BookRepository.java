@@ -21,4 +21,5 @@ public interface BookRepository extends ElasticsearchRepository<Book, Integer> {
     // 根据类型模糊查询书籍
     List<Book> findByTypeContaining(String type);
 
+
 }
