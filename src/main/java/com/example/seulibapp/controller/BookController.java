@@ -35,15 +35,11 @@ public class BookController {
         return elasticsearchService.getAllBooks();  // 获取所有书籍
     }
 
-    // 获取书籍详情
-    @GetMapping("/{bid}")
-    public Book getBookById(@PathVariable Integer bid) {
-        return elasticsearchService.getBookById(bid);  // 根据ID获取书籍
-    }
+
 
     // 删除书籍
     @DeleteMapping("/{bid}")
-    public void deleteBook(@PathVariable Integer bid) {
+    public void deleteBook(@PathVariable String bid) {
         elasticsearchService.deleteBook(bid);  // 删除书籍
     }
 

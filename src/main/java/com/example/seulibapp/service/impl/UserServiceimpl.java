@@ -24,44 +24,51 @@ public class UserServiceimpl implements UserService {
 
     @Override
     public List<User>getUserList(){
-        return userDao.getUserList();
+        return userDao.findAll();
     }
 
     @Override
-    public User getUserById(int id) {
-        return userDao.getUserById(id);
+    public User getUserById(String id) {
+        return userDao.findByUid(id);
     }
 
     @Override
     public User getUserByEmail(String email) {
-        return userDao.getUserByEmail(email);
+        return userDao.findByEmail(email);
     }
 
     @Override
     public User getUserByUsername(String username) {
-        return userDao.getUserByUsername(username);
+        return userDao.findByUserName(username);
     }
 
     @Override
-    public int addUser(User user) {
-        return userDao.addUser(user);
+    public User addUser(User user) {
+        return userDao.save(user);
     }
 
     @Override
-    public int updateUser(User user) throws ExecutionException, InterruptedException {
+    public User updateUser(User user) throws ExecutionException, InterruptedException {
 
         memcacheService.addToCache(user.getUserName(), 3600, user.toString());
-        return userDao.updateUser(user);
+        return userDao.save(user);
     }
 
     @Override
-    public int deleteUser(int id) {
-        return userDao.deleteUser(id);
+    public int deleteUser(String id) {
+        userDao.delete(userDao.findByUid(id));
+
+        if(userDao.findByUid(id) == null) {
+            return 0;
+        }
+        else{
+            return 1;
+        }
     }
 
     @Override
     public boolean validateCredentials(String username, String password) {
-         User user = userDao.getUserByUsername(username);
+         User user = userDao.findByUserName(username);
          if (user == null) {
              return false;
          }

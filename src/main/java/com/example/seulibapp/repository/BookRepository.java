@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BookRepository extends ElasticsearchRepository<Book, Integer> {
+public interface BookRepository extends ElasticsearchRepository<Book, String> {
 
     // 根据书名模糊查询书籍
     List<Book> findByBnameContaining(String keyword);

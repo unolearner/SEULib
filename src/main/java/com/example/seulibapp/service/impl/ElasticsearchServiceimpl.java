@@ -54,7 +54,7 @@ public class ElasticsearchServiceimpl implements ElasticsearchService {
 
 
     @Override
-    public void deleteBook(Integer bid) {
+    public void deleteBook(String bid) {
         bookRepository.deleteById(bid);  // 删除书籍
     }
 

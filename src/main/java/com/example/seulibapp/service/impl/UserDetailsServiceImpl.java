@@ -29,12 +29,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 通过UserDao根据用户名查询用户信息，自己查询dao访问接口的方式
-        User user = userDao.findByUsername(new User().setUsername(username));
+        User user = userDao.findByUserName(username);
         // 如果用户不存在，抛出异常
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
         // 返回UserDetails对象，包含用户名、密码和权限列表（此处简化为返回空列表）
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
+        return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(), new ArrayList<>());
     }
 }

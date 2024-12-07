@@ -1,9 +1,11 @@
 package com.example.seulibapp.service;
 
 import com.example.seulibapp.entity.Book;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface ElasticsearchService {
 
     // 保存书籍到 Elasticsearch
@@ -26,7 +28,7 @@ public interface ElasticsearchService {
 
 
     // 删除书籍
-    void deleteBook(Integer bid);
+    void deleteBook(String bid);
 
     // 从数据库获取书籍
     List<Book> getAllBooksFromDb();

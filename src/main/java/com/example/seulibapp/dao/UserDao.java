@@ -2,16 +2,23 @@ package com.example.seulibapp.dao;
 
 
 import com.example.seulibapp.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface UserDao {
-    public List<User>getUserList();
-    public User getUserById(int id);
-    public User getUserByEmail(String email);
-    public User getUserByUsername(String username);
-    public int addUser(User user);
-    public int updateUser(User user);
-    public int deleteUser(int id);
+@Repository
+public interface UserDao extends JpaRepository<User, Long> {
+    // 自动实现，查询所有用户
+    List<User> findAll();
+
+    // 根据 uid 查询用户
+    User findByUid(String id);
+
+    // 根据 email 查询用户
+    User findByEmail(String email);
+
+    // 根据 username 查询用户
+    User findByUserName(String username);
 
 }

@@ -1,12 +1,16 @@
 package com.example.seulibapp.entity;
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Data;
 
-@Data
+
+@Entity
 public class User {
+    @Id
     //用户id 主键
-    private String id;
+    private String uid;
     //用户名
     private String userName;
     //用户密码
@@ -19,12 +23,12 @@ public class User {
     //登录状态
     private String status;
 
-    public String getId() {
-        return id;
+    public String getuid() {
+        return uid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setuid(String id) {
+        this.uid = id;
     }
 
     public String getUserName() {

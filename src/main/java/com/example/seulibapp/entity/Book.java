@@ -1,13 +1,16 @@
 package com.example.seulibapp.entity;
 
+
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import java.util.Date;
 
 @Data
 @Document(indexName = "books")     //es 中的索引名称
 public class Book {
-    private Integer bid;
+    @Id
+    private String bid;
 
     private String bname;
 
