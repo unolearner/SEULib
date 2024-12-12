@@ -78,12 +78,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-elasticsearch</artifactId><!-- 确保与 Spring Boot 版本匹配 -->
 		</dependency>
-		<!-- Spring Data Elasticsearch -->
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-elasticsearch</artifactId>
-			<version>5.3.6</version>
-		</dependency>
 
 		<!-- 添加JWT（JSON Web Token）处理依赖 -->
 	        <dependency>

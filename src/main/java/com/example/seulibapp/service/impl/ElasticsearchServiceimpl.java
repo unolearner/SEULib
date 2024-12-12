@@ -1,9 +1,11 @@
 package com.example.seulibapp.service.impl;
 
+import com.example.seulibapp.dao.BookDao;
 import com.example.seulibapp.entity.Book;
 import com.example.seulibapp.repository.BookRepository;
 import com.example.seulibapp.service.ElasticsearchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +17,11 @@ import java.util.stream.StreamSupport;
 public class ElasticsearchServiceimpl implements ElasticsearchService {
 
     @Autowired
+    @Qualifier("bookRepository")
     private BookRepository bookRepository;  // 注入 BookRepository 进行 Elasticsearch 操作
+    @Autowired
+    @Qualifier("bookDao")
+    private BookDao bookDao;
 
 
     @Override
@@ -60,7 +66,7 @@ public class ElasticsearchServiceimpl implements ElasticsearchService {
 
     @Override
     public List<Book> getAllBooksFromDb() {
-        Iterable<Book> booksIterable = bookRepository.findAll();
+        Iterable<Book> booksIterable = bookDao.findAll();
         return StreamSupport.stream(booksIterable.spliterator(), false)
                 .collect(Collectors.toList()); // 使用 Stream 将 Iterable 转换为 List // 获取数据库中的所有书籍
     }

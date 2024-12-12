@@ -19,3 +19,4 @@ public interface UserService {
 
     public boolean validateCredentials(String username, String password);
 }
+

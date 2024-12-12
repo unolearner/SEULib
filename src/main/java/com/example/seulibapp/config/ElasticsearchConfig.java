@@ -6,10 +6,14 @@ import org.springframework.data.elasticsearch.client.ClientConfiguration;
 
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
-
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 
 @Configuration
+@EnableElasticsearchRepositories(
+        basePackages = "com.example.seulibapp.repository", // Elasticsearch 存储库接口所在的包
+        elasticsearchTemplateRef = "elasticsearchTemplate"
+)
 public class ElasticsearchConfig {
 
     @Bean

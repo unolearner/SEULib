@@ -4,6 +4,8 @@ package com.example.seulibapp.service.impl;
 import com.example.seulibapp.entity.Book;
 import com.example.seulibapp.repository.BookRepository;
 import com.example.seulibapp.service.ElasticsearchSyncService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +13,8 @@ import java.util.List;
 @Service
 public class ElasticsearchSyncServiceimpl implements ElasticsearchSyncService {
 
+    @Autowired
+    @Qualifier("bookRepository")
     private BookRepository bookRepository;
 
 
