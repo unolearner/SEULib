@@ -68,15 +68,15 @@ public class UserServiceimpl implements UserService {
 
     @Override
     public boolean validateCredentials(String username, String password) {
-         User user = userDao.findByUserName(username);
-         if (user == null) {
-             return false;
-         }
-         else if(!user.getPassword().equals(password)) {
-             return false;
-         }
+        User user = userDao.findByUserName(username);
+        if (user == null) {
+            return false;
+        }
+        else if(!user.getPassword().equals(password)) {
+            return false;
+        }
 
-         return true;
+        return true;
     }
 
 }
