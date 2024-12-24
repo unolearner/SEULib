@@ -79,4 +79,53 @@ public class UserController {
             return new ResponseEntity<>(Collections.singletonMap("error", "An unexpected error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<Map<String, Object>> register(@RequestBody User user) {
+        try {
+            if (user == null || user.getUserName() == null || user.getPassword() == null || user.getEmail() == null) {
+                log.warn("Invalid input data: {}", user);
+                return new ResponseEntity<>(Collections.singletonMap("error", "Invalid input data"), HttpStatus.BAD_REQUEST);
+            }
+
+            // 检查缓存中的用户信息
+            User cachedUser = memcacheService.getFromCache(user.getUserName(), User.class);
+
+            if (cachedUser != null) {
+                log.warn("User {} already registered", user.getUserName());
+                return new ResponseEntity<>(Collections.singletonMap("error", "User already registered"), HttpStatus.CONFLICT);
+            } else {
+                // 检查数据库中是否已存在该用户名
+                User existingUser = userService.getUserByUsername(user.getUserName());
+                if (existingUser != null) {
+                    log.warn("User {} already registered in the database", user.getUserName());
+                    return new ResponseEntity<>(Collections.singletonMap("error", "User already registered"), HttpStatus.CONFLICT);
+                } else {
+                    // 执行用户注册
+                    User registeredUser = userService.addUser(user);
+                    if (registeredUser != null) {
+                        log.info("Registration successful for user: {}", user.getUserName());
+                        // 注册成功，将用户信息缓存起来
+                        memcacheService.addToCache(user.getUserName(), 3600, registeredUser);
+                        Map<String, Object> response = new HashMap<>();
+                        response.put("message", "Registration successful");
+                        response.put("user", registeredUser);
+                        return new ResponseEntity<>(response, HttpStatus.CREATED);
+                    } else {
+                        log.warn("Registration failed for user: {}", user.getUserName());
+                        // 注册失败，返回错误信息
+                        return new ResponseEntity<>(Collections.singletonMap("error", "Registration failed"), HttpStatus.INTERNAL_SERVER_ERROR);
+                    }
+                }
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            log.error("Error occurred during cache operation", e);
+            return new ResponseEntity<>(Collections.singletonMap("error", "Cache operation failed"), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            log.error("Unexpected error occurred during registration", e);
+            return new ResponseEntity<>(Collections.singletonMap("error", "An unexpected error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 }
