@@ -79,30 +79,30 @@
 			<artifactId>spring-boot-starter-data-elasticsearch</artifactId><!-- 确保与 Spring Boot 版本匹配 -->
 		</dependency>
 
-		<!-- 添加JWT（JSON Web Token）处理依赖 -->
-	        <dependency>
-	            <groupId>io.jsonwebtoken</groupId>
-	            <artifactId>jjwt-api</artifactId>
-	            <version>0.11.2</version>
-	        </dependency>
-	        <!-- 添加JWT实现类依赖 -->
-	        <dependency>
-	            <groupId>io.jsonwebtoken</groupId>
-	            <artifactId>jjwt-impl</artifactId>
-	            <version>0.11.2</version>
-	        </dependency>
-	        <!-- 添加JWT序列化和反序列化处理依赖 -->
-	        <dependency>
-	            <groupId>io.jsonwebtoken</groupId>
-	            <artifactId>jjwt-jackson</artifactId> <!-- 或者使用 jjwt-gson 如果你更喜欢 Gson
-		-->
-	            <version>0.11.2</version>
-	        </dependency>
-	        <!-- 添加Spring Boot安全启动依赖 -->
-	        <dependency>
-	            <groupId>org.springframework.boot</groupId>
-	            <artifactId>spring-boot-starter-security</artifactId>
-	        </dependency>
+<!--		&lt;!&ndash; 添加JWT（JSON Web Token）处理依赖 &ndash;&gt;-->
+<!--	        <dependency>-->
+<!--	            <groupId>io.jsonwebtoken</groupId>-->
+<!--	            <artifactId>jjwt-api</artifactId>-->
+<!--	            <version>0.11.2</version>-->
+<!--	        </dependency>-->
+<!--	        &lt;!&ndash; 添加JWT实现类依赖 &ndash;&gt;-->
+<!--	        <dependency>-->
+<!--	            <groupId>io.jsonwebtoken</groupId>-->
+<!--	            <artifactId>jjwt-impl</artifactId>-->
+<!--	            <version>0.11.2</version>-->
+<!--	        </dependency>-->
+<!--	        &lt;!&ndash; 添加JWT序列化和反序列化处理依赖 &ndash;&gt;-->
+<!--	        <dependency>-->
+<!--	            <groupId>io.jsonwebtoken</groupId>-->
+<!--	            <artifactId>jjwt-jackson</artifactId> &lt;!&ndash; 或者使用 jjwt-gson 如果你更喜欢 Gson-->
+<!--		&ndash;&gt;-->
+<!--	            <version>0.11.2</version>-->
+<!--	        </dependency>-->
+<!--	        &lt;!&ndash; 添加Spring Boot安全启动依赖 &ndash;&gt;-->
+<!--	        <dependency>-->
+<!--	            <groupId>org.springframework.boot</groupId>-->
+<!--	            <artifactId>spring-boot-starter-security</artifactId>-->
+<!--	        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
