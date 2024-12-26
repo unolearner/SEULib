@@ -34,8 +34,8 @@ public class Book {
     @Field(type = FieldType.Keyword) // 精确匹配
     private String printer;
 
-    @Field(type = FieldType.Date, format = {}, pattern = "yyyy-MM-dd") // 日期类型
-    private Date date;
+    @Field(type = FieldType.Text, format = {}, pattern = "yyyy-MM-dd") // 日期类型
+    private String date;
 
     @Field(type = FieldType.Keyword) // 分类字段
     private String type;
