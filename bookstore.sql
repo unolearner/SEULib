@@ -22,14 +22,13 @@ CREATE TABLE `book` (
   `bid` int(10) NOT NULL AUTO_INCREMENT,
   `bname` varchar(255) DEFAULT NULL,
   `detail` varchar(255) DEFAULT NULL,
-  `pirce` varchar(255) DEFAULT NULL,
-  `writer` varchar(255) DEFAULT NULL,
+  `price` varchar(255) DEFAULT NULL,
+  `author` varchar(255) DEFAULT NULL,
   `printer` varchar(255) DEFAULT NULL,
   `date` date DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
   `image` varchar(255) DEFAULT NULL,
   `store` int(10) DEFAULT NULL,
-  `sales` int(10) DEFAULT 0,
   PRIMARY KEY (`bid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
 
@@ -80,7 +79,6 @@ CREATE TABLE `book_order` (
   `adress` varchar(255) DEFAULT NULL,
   `status` varchar(255) DEFAULT NULL,
   `uid` int(11) DEFAULT NULL,
-  `bid` int(11) DEFAULT NULL,
   PRIMARY KEY (`oid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
