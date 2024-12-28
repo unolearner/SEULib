@@ -26,10 +26,10 @@ public class Book {
     private String detail;
 
     @Field(type = FieldType.Keyword) // 精确匹配
-    private String pirce;
+    private String price;
 
     @Field(type = FieldType.Keyword) // 精确匹配
-    private String writer;
+    private String author;
 
     @Field(type = FieldType.Keyword) // 精确匹配
     private String printer;
