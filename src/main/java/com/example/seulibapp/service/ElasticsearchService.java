@@ -32,4 +32,7 @@ public interface ElasticsearchService {
 
     // 从数据库获取书籍
     List<Book> getAllBooksFromDb();
+
+    // 获取销量前十的书籍
+    List<Book> getTop10BooksBySales();
 }

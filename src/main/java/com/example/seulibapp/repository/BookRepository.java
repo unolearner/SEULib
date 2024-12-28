@@ -21,5 +21,6 @@ public interface BookRepository extends ElasticsearchRepository<Book, String> {
     // 根据类型模糊查询书籍
     List<Book> findByTypeContaining(String type);
 
-
+    // 查询销量前10的书籍
+    List<Book> findTop10ByOrderBySalesDesc();
 }

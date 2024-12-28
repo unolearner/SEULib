@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+
+import org.springframework.data.domain.PageRequest;
+
 @Service
 public class ElasticsearchServiceimpl implements ElasticsearchService {
 
@@ -69,6 +72,13 @@ public class ElasticsearchServiceimpl implements ElasticsearchService {
         Iterable<Book> booksIterable = bookDao.findAll();
         return StreamSupport.stream(booksIterable.spliterator(), false)
                 .collect(Collectors.toList()); // 使用 Stream 将 Iterable 转换为 List // 获取数据库中的所有书籍
+    }
+
+    @Override
+    public List<Book> getTop10BooksBySales() {
+
+        // 返回销量前10的书籍
+        return bookRepository.findTop10ByOrderBySalesDesc();
     }
 
 }

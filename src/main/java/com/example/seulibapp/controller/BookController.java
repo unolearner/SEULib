@@ -43,4 +43,13 @@ public class BookController {
         elasticsearchService.deleteBook(bid);  // 删除书籍
     }
 
+    /**
+     * 查询销量前十的书籍
+     * @return 前十书籍的列表
+     */
+    @GetMapping("/top-books")
+    public List<Book> getTop10Books() {
+        return elasticsearchService.getTop10BooksBySales();
+    }
+
 }
