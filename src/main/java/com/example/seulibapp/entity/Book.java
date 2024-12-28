@@ -45,4 +45,7 @@ public class Book {
 
     @Field(type = FieldType.Integer) // 数字类型
     private Integer store;
+
+    @Field(type = FieldType.Integer)
+    private Integer sales;    // 销量
 }

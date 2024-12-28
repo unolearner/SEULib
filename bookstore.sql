@@ -29,6 +29,7 @@ CREATE TABLE `book` (
   `type` varchar(255) DEFAULT NULL,
   `image` varchar(255) DEFAULT NULL,
   `store` int(10) DEFAULT NULL,
+  `sales` int(10) DEFAULT 0,
   PRIMARY KEY (`bid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
 
@@ -79,6 +80,7 @@ CREATE TABLE `book_order` (
   `adress` varchar(255) DEFAULT NULL,
   `status` varchar(255) DEFAULT NULL,
   `uid` int(11) DEFAULT NULL,
+  `bid` int(11) DEFAULT NULL,
   PRIMARY KEY (`oid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
