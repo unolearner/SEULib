@@ -15,7 +15,7 @@ public interface ElasticsearchService {
     List<Book> searchBooksByName(String keyword);
 
     // 根据作者模糊搜索书籍
-    List<Book> searchBooksByWriter(String writer);
+    List<Book> searchBooksByAuthor(String author);
 
     // 根据出版社模糊搜索书籍
     List<Book> searchBooksByPrinter(String printer);
