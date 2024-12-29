@@ -1,5 +1,35 @@
 //package com.example.seulibapp.controller;
 //
+////import com.example.seulibapp.entity.AuthenticationRequest;
+////import com.example.seulibapp.entity.AuthenticationResponse;
+//////import com.example.seulibapp.service.MemcacheService;
+////import com.example.seulibapp.util.JwtUtil;
+//import jakarta.annotation.Resource;
+//import org.springframework.context.annotation.Scope;
+//import org.springframework.http.ResponseEntity;
+//import org.springframework.security.authentication.AuthenticationManager;
+//import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+//import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.core.userdetails.UserDetailsService;
+//import org.springframework.web.bind.annotation.*;
+//
+///**
+// * 认证控制器，用于处理用户认证请求
+// */
+//@CrossOrigin(origins = "*")
+//@RestController
+//@Scope("prototype")
+//@RequestMapping
+//public class AuthenticateController {
+//
+////    @Resource
+////    private MemcacheService service;
+//
+//    @Resource
+//    private AuthenticationManager authenticationManager;
+//
+//package com.example.seulibapp.controller;
+//
 //import com.example.seulibapp.entity.AuthenticationRequest;
 //import com.example.seulibapp.entity.AuthenticationResponse;
 ////import com.example.seulibapp.service.MemcacheService;

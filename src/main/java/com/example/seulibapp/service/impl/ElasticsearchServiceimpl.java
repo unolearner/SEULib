@@ -33,6 +33,11 @@ public class ElasticsearchServiceimpl implements ElasticsearchService {
     }
 
     @Override
+    public Book searchBookById(String id) {
+        return bookRepository.findById(id).get();
+    }
+
+    @Override
     @Cacheable(value = "books", key = "#keyword")
     public List<Book> searchBooksByName(String keyword) {
         return bookRepository.findByBnameContaining(keyword);

@@ -17,7 +17,7 @@ public class ElasticsearchSyncConfig {
         return args -> {
             // 获取数据库中的所有书籍
             List<Book> booksFromDb = bookService.getAllBooksFromDb();
-            System.out.println(booksFromDb);
+            //System.out.println(booksFromDb);
 
             // 同步到 Elasticsearch
             elasticsearchSyncService.syncBooksToElasticsearch(booksFromDb);

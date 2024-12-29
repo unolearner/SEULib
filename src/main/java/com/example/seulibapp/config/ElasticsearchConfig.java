@@ -19,7 +19,7 @@ public class ElasticsearchConfig {
     @Bean
     public RestClient restClient() {
         // 配置 HTTP 主机地址
-        HttpHost httpHost = new HttpHost("192.168.204.132", 9200, "http");
+        HttpHost httpHost = new HttpHost("192.168.152.133", 9200, "http");
         return RestClient.builder(httpHost).build();
     }
 
@@ -27,7 +27,7 @@ public class ElasticsearchConfig {
     public ClientConfiguration clientConfiguration() {
         // 配置 Elasticsearch 客户端配置
         return ClientConfiguration.builder()
-                .connectedTo("192.168.204.132:9200")  // 配置连接的地址
+                .connectedTo("192.168.152.133:9200")  // 配置连接的地址
                 .build();
     }
 }

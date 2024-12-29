@@ -11,6 +11,9 @@ public interface ElasticsearchService {
     // 保存书籍到 Elasticsearch
     void saveBook(Book book);
 
+    //根据ID搜索书本
+    Book searchBookById(String id);
+
     // 根据书名搜索书籍
     List<Book> searchBooksByName(String keyword);
 

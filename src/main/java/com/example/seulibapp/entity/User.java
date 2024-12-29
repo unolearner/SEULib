@@ -20,9 +20,6 @@ public class User {
     //用户类型，普通用户/管理员
     private String userType;
 
-    //登录状态
-    private String status;
-
     public String getuid() {
         return uid;
     }
@@ -35,8 +32,9 @@ public class User {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    public String setUserName(String userName) {
         this.userName = userName;
+        return userName;
     }
 
     public String getPassword() {
@@ -61,13 +59,5 @@ public class User {
 
     public void setUserType(String userType) {
         this.userType = userType;
-    }
-
-    public String getStatus(){
-        return this.status;
-    }
-
-    public void setStatus(String status){
-        this.status = status;
     }
 }
