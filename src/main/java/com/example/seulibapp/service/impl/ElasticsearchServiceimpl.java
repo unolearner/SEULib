@@ -39,9 +39,9 @@ public class ElasticsearchServiceimpl implements ElasticsearchService {
     }
 
     @Override
-    @Cacheable(value = "books", key = "#writer")
-    public List<Book> searchBooksByWriter(String writer) {
-        return bookRepository.findByWriterContaining(writer);
+    @Cacheable(value = "books", key = "#author")
+    public List<Book> searchBooksByAuthor(String author) {
+        return bookRepository.findByAuthorContaining(author);
     }
 
     @Override
