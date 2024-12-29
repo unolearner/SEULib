@@ -13,7 +13,7 @@ public interface BookRepository extends ElasticsearchRepository<Book, String> {
     List<Book> findByBnameContaining(String keyword);
 
     // 根据作者类型模糊查询书籍
-    List<Book> findByWriterContaining(String writer);
+    List<Book> findByAuthorContaining(String author);
 
     // 根据出版商模糊查询书籍
     List<Book> findByPrinterContaining(String printer);
