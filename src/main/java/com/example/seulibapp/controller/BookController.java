@@ -160,4 +160,20 @@ public class BookController {
                 .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .body(resource);
     }
+
+    /**
+     * 更新书籍的方法
+     * @param updatedBook 传入的书籍实体
+     * @return 返回保存后的书籍实体
+     */
+    @PutMapping("/update")
+    public ResponseEntity<Book> updateBookInventory(@RequestBody Book updatedBook) {
+        // 调用 Elasticsearch 服务来保存更新后的书籍
+        elasticsearchService.saveBook(updatedBook);
+
+        // 使用保存后的book ID查询最新的实体
+        Book savedBook = elasticsearchService.searchBookById(updatedBook.getBid());
+
+        return ResponseEntity.ok(savedBook); // 返回保存后的书籍实体
+    }
 }
