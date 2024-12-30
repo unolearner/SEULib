@@ -79,7 +79,40 @@
 			<artifactId>spring-boot-starter-data-elasticsearch</artifactId><!-- 确保与 Spring Boot 版本匹配 -->
 		</dependency>
 
-<!--		&lt;!&ndash; 添加JWT（JSON Web Token）处理依赖 &ndash;&gt;-->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>5.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>5.2.3</version> <!-- 可以根据需要选择适当的版本 -->
+		</dependency>
+
+
+		<!-- Apache POI for 日期格式等工具支持 -->
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml-schemas</artifactId>
+				<version>4.1.2</version> <!-- 可选，如果你需要处理更复杂的 OOXML 模型 -->
+			</dependency>
+
+			<!-- 解决处理 .xlsx 文件时可能需要的 XML 解析器 -->
+			<dependency>
+				<groupId>org.apache.xmlbeans</groupId>
+				<artifactId>xmlbeans</artifactId>
+				<version>5.1.1</version>
+			</dependency>
+
+			<!-- Optional: 解决可能需要的压缩支持（如 .xlsx 的压缩文件解析） -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-compress</artifactId>
+				<version>1.21</version>
+			</dependency>
+
+		<!--		&lt;!&ndash; 添加JWT（JSON Web Token）处理依赖 &ndash;&gt;-->
 <!--	        <dependency>-->
 <!--	            <groupId>io.jsonwebtoken</groupId>-->
 <!--	            <artifactId>jjwt-api</artifactId>-->

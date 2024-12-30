@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository("recordDao")
-public interface RecordDao extends JpaRepository<BookRecord, String> {
+public interface RecordDao extends JpaRepository<BookRecord, Long> {
     List<Record> findByUserUid(String userId);
-    List<Record> findByBookBid(String bookId);
+    List<Record> findByBookBid(Long bookId);
 }

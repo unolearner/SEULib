@@ -18,6 +18,7 @@ public class ElasticsearchSyncServiceimpl implements ElasticsearchSyncService {
     private BookRepository bookRepository;
 
 
+
     // 从数据库同步书籍到 Elasticsearch
     // 同步数据库数据到 Elasticsearch
     @Override
@@ -34,6 +35,9 @@ public class ElasticsearchSyncServiceimpl implements ElasticsearchSyncService {
         }
         System.out.println("数据库数据同步到 Elasticsearch 完成");
     }
-
+    public void deleteAllBooksFromElasticsearch() {
+        // 删除所有书籍文档
+        bookRepository.deleteAll();
+    }
 }
 

@@ -6,6 +6,7 @@ import com.example.seulibapp.entity.BookRecord;
 import com.example.seulibapp.entity.Reservation;
 import com.example.seulibapp.entity.User;
 import com.example.seulibapp.dao.ReservationDao;
+import com.example.seulibapp.excel.ExcelService;
 import com.example.seulibapp.myEnum.ActionType;
 import com.example.seulibapp.request.BorrowRequest;
 import com.example.seulibapp.response.MyErrorResponse;
@@ -17,7 +18,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -37,6 +40,9 @@ public class BookController {
     @Autowired
     @Qualifier("recordDao")
     private RecordDao recordDao;
+
+    @Autowired
+    private ExcelService excelService;
 
     // 添加书籍
     @PostMapping("/add")
@@ -60,7 +66,7 @@ public class BookController {
 
     // 删除书籍
     @DeleteMapping("/{bid}")
-    public void deleteBook(@PathVariable String bid) {
+    public void deleteBook(@PathVariable Long bid) {
         elasticsearchService.deleteBook(bid);  // 删除书籍
     }
 
@@ -103,5 +109,31 @@ public class BookController {
         record.setActionDate(LocalDateTime.now().format(formatter));
         recordDao.save(record);
         return ResponseEntity.ok("借阅成功,借阅人："+user.getUserName());
+    }
+
+
+    /**
+     *
+     * 从excel表中导入书籍
+     * @param file excel 文件
+     * @return 相关信息？成功，或者失败
+     */
+    @PostMapping("/import")
+    public String importBooks(@RequestParam("file") MultipartFile file) {
+        try {
+            // 解析 Excel 文件
+            List<Book> books = excelService.importBooksFromExcel(file);
+            System.out.println(books);
+
+            // 将解析的书籍传递给 ElasticsearchService
+            elasticsearchService.processImportedBooks(books);
+
+            System.out.println(books);
+            return "书籍导入成功，数量：" + books.size();
+        } catch (IOException e) {
+            return "文件解析失败：" + e.getMessage();
+        } catch (IllegalArgumentException e) {
+            return "文件类型错误：" + e.getMessage();
+        }
     }
 }

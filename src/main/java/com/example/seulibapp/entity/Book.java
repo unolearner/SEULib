@@ -3,6 +3,8 @@ package com.example.seulibapp.entity;
 
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -17,7 +19,8 @@ import java.util.Date;
 public class Book {
     @Id
     @jakarta.persistence.Id
-    private String bid;
+    @jakarta.persistence.GeneratedValue(strategy = GenerationType.IDENTITY) // 自增主键
+    private Long bid;
 
     @Field(type = FieldType.Text) // 支持全文搜索
     private String bname;

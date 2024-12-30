@@ -12,7 +12,7 @@ public interface ElasticsearchService {
     void saveBook(Book book);
 
     //根据ID搜索书本
-    Book searchBookById(String id);
+    Book searchBookById(Long id);
 
     // 根据书名搜索书籍
     List<Book> searchBooksByName(String keyword);
@@ -31,11 +31,14 @@ public interface ElasticsearchService {
 
 
     // 删除书籍
-    void deleteBook(String bid);
+    void deleteBook(Long bid);
 
     // 从数据库获取书籍
     List<Book> getAllBooksFromDb();
 
     // 获取销量前十的书籍
     List<Book> getTop10BooksBySales();
+
+    // 处理从Excel里导入的新书
+    void processImportedBooks(List<Book> importedBooks);
 }

@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -33,7 +35,7 @@ public class ElasticsearchServiceimpl implements ElasticsearchService {
     }
 
     @Override
-    public Book searchBookById(String id) {
+    public Book searchBookById(Long id) {
         return bookRepository.findById(id).get();
     }
 
@@ -68,7 +70,7 @@ public class ElasticsearchServiceimpl implements ElasticsearchService {
 
 
     @Override
-    public void deleteBook(String bid) {
+    public void deleteBook(Long bid) {
         bookRepository.deleteById(bid);  // 删除书籍
     }
 
@@ -86,4 +88,42 @@ public class ElasticsearchServiceimpl implements ElasticsearchService {
         return bookRepository.findTop10ByOrderBySalesDesc();
     }
 
+
+    @Override
+    public void processImportedBooks(List<Book> importedBooks) {
+        List<Book> newBooks = new ArrayList<>(); // 用于保存不存在的书籍
+        List<Book> updatedBooks = new ArrayList<>(); // 用于保存需要更新库存的书籍
+
+        for (Book importedBook : importedBooks) {
+            // 根据书名，作者，出版社，出版日期 查询是否已存在
+            Book existingBook = bookRepository.findByBnameAndAuthorAndPrinterAndDate(importedBook.getBname(),
+                    importedBook.getAuthor(),importedBook.getPrinter(),importedBook.getDate());
+
+            if (existingBook != null) {
+                int store = importedBook.getStore() +existingBook.getStore();
+                // 如果书已存在，更新库存
+                existingBook.setStore(store);
+                updatedBooks.add(existingBook);
+            } else {
+
+                // 如果书不存在，作为新书添加
+                importedBook.setBid(UUID.randomUUID().getMostSignificantBits());
+                importedBook.setSales(0);
+                newBooks.add(importedBook);
+            }
+        }
+        System.out.println("新书：");
+        System.out.println(newBooks);
+        System.out.println("已存在的书籍:");
+        System.out.println(updatedBooks);
+        // 批量保存更新的书籍
+        if (!updatedBooks.isEmpty()) {
+            bookRepository.saveAll(updatedBooks);
+        }
+
+        // 批量保存新书
+        if (!newBooks.isEmpty()) {
+            bookRepository.saveAll(newBooks);
+        }
+    }
 }
