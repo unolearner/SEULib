@@ -47,6 +47,7 @@ public class UserController {
 
             // 检查缓存中的用户信息
             User cachedUser = memcacheService.getFromCache(user.getUserName(), User.class);
+//            System.out.println(cachedUser);
 
             if (cachedUser != null) {
                 log.info("User {} already logged in", user.getUserName());
@@ -59,11 +60,15 @@ public class UserController {
                 boolean valid = userService.validateCredentials(user.getUserName(), user.getPassword());
                 if (valid) {
                     log.info("Login successful for user: {}", user.getUserName());
+
+                    // 获取完整的用户信息，包括 email, uid, userType
+                    User fullUserInfo = userService.getUserByUsername(user.getUserName());
+
                     // 登录成功，设置会话或返回登录令牌
-                    memcacheService.addToCache(user.getUserName(), 3600, user);
+                    memcacheService.addToCache(user.getUserName(), 3600, fullUserInfo);
                     Map<String, Object> response = new HashMap<>();
                     response.put("message", "Login successful");
-                    response.put("user", user);
+                    response.put("user", fullUserInfo);
                     return new ResponseEntity<>(response, HttpStatus.OK);
                 } else {
                     log.warn("Invalid credentials for user: {}", user.getUserName());
