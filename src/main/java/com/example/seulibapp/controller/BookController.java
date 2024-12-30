@@ -1,5 +1,7 @@
 package com.example.seulibapp.controller;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import com.example.seulibapp.dao.RecordDao;
 import com.example.seulibapp.entity.Book;
 import com.example.seulibapp.entity.BookRecord;
@@ -15,7 +17,9 @@ import com.example.seulibapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -135,5 +139,25 @@ public class BookController {
         } catch (IllegalArgumentException e) {
             return "文件类型错误：" + e.getMessage();
         }
+    }
+
+    /**
+     * 下载导入模板的 方法
+     * @return Http响应头，提升下载文件
+     * @throws IOException IO异常
+     */
+    @GetMapping("/download-book-template")
+    public ResponseEntity<Resource> downloadBookTemplate() throws IOException {
+        // 资源路径是 /Template/book-template.xlsx
+        Resource resource = new ClassPathResource("templates/Book_Entry_Template.xlsx");
+
+        // 获取文件名
+        String filename = resource.getFilename();
+
+        // 设置 HTTP 响应头
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(resource);
     }
 }
