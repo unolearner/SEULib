@@ -13,6 +13,7 @@ import lombok.Data;
 @Table(name="user")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     //用户id 主键
     private String uid;
     //用户名
