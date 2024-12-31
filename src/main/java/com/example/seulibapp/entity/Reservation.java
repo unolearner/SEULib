@@ -13,13 +13,9 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
-    @ManyToOne
-    @JoinColumn(name = "bid")
-    private Book book;
+    private long bid;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    private String userId;
 
     private String reservationDate;
 }

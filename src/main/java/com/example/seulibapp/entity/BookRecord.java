@@ -12,13 +12,10 @@ public class BookRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
-    @ManyToOne
-    @JoinColumn(name = "bid")
-    private Book book;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    private long bid;
+
+    private String userId;
 
     private String actionDate;
 

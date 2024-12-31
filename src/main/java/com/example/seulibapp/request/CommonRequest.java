@@ -1,6 +1,6 @@
 package com.example.seulibapp.request;
 
-public class BorrowRequest {
+public class CommonRequest {
     private Long bookId;
     private String userId;
 

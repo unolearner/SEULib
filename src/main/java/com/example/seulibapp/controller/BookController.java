@@ -10,7 +10,7 @@ import com.example.seulibapp.entity.User;
 import com.example.seulibapp.dao.ReservationDao;
 import com.example.seulibapp.excel.ExcelService;
 import com.example.seulibapp.myEnum.ActionType;
-import com.example.seulibapp.request.BorrowRequest;
+import com.example.seulibapp.request.CommonRequest;
 import com.example.seulibapp.response.MyErrorResponse;
 import com.example.seulibapp.service.ElasticsearchService;
 import com.example.seulibapp.service.UserService;
@@ -89,15 +89,15 @@ public class BookController {
      * @return null
      */
     @PostMapping("/borrow")
-    ResponseEntity<?>borrowBook(@RequestBody BorrowRequest request) {
+    ResponseEntity<?>borrowBook(@RequestBody CommonRequest request) {
         Book book=elasticsearchService.searchBookById(request.getBookId());
         User user=userService.getUserById(request.getUserId());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         if(book.getStore()==0){//库存不足，进行预约，返回信息
             Reservation reservation=new Reservation();
-            reservation.setBook(book);
+            reservation.setBid(request.getBookId());
             reservation.setReservationDate(LocalDateTime.now().format(formatter));
-            reservation.setUser(user);
+            reservation.setUserId(request.getUserId());
             reservationDao.save(reservation);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new MyErrorResponse("Out of stock","库存不足，无法借阅，已为您预约"));
@@ -108,8 +108,8 @@ public class BookController {
         elasticsearchService.saveBook(book);
         //留下借阅记录
         BookRecord record=new BookRecord();
-        record.setUser(user);
-        record.setBook(book);
+        record.setUserId(request.getUserId());
+        record.setBid(request.getBookId());
         record.setActionType(ActionType.BORROW);
         record.setActionDate(LocalDateTime.now().format(formatter));
         recordDao.save(record);
@@ -176,5 +176,21 @@ public class BookController {
         Book savedBook = elasticsearchService.searchBookById(updatedBook.getBid());
 
         return ResponseEntity.ok(savedBook); // 返回保存后的书籍实体
+    }
+
+    @PostMapping("/return")
+    public ResponseEntity<?>returnBook(@RequestBody CommonRequest request) {
+        Book book=elasticsearchService.searchBookById(request.getBookId());
+        book.setStore(book.getStore()+1);//还书，库存加一
+        elasticsearchService.saveBook(book);
+        //留下记录
+        BookRecord record=new BookRecord();
+        record.setBid(request.getBookId());
+        record.setUserId(request.getUserId());
+        record.setActionType(ActionType.RETURN);
+        DateTimeFormatter formatter=DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        record.setActionDate(LocalDateTime.now().format(formatter));
+        recordDao.save(record);
+        return ResponseEntity.ok("还书成功，书籍"+book.getBname()+"现存量为"+book.getStore());
     }
 }

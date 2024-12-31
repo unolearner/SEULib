@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository("reservationRepository")
 public interface ReservationDao extends JpaRepository<Reservation, Long> {
-    List<Reservation> findByBookBid(Long bookId);
+    List<Reservation> findByBid(Long bookId);
 }

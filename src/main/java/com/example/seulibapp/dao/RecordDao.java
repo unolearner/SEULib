@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository("recordDao")
 public interface RecordDao extends JpaRepository<BookRecord, Long> {
-    List<Record> findByUserUid(String userId);
-    List<Record> findByBookBid(Long bookId);
+    List<Record> findByUserId(String userId);
+    List<Record> findByBid(Long bookId);
 }
