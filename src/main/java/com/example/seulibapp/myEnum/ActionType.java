@@ -1,5 +1,5 @@
 package com.example.seulibapp.myEnum;
 
 public enum ActionType {
-    BORROW, RETURN, ReBorrow
+    BORROW, RETURN, REBORROW
 }

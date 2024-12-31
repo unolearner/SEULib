@@ -1,12 +1,16 @@
 package com.example.seulibapp.entity;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
 
 
 @Entity
+@Data
+@Table(name="user")
 public class User {
     @Id
     //用户id 主键
@@ -19,6 +23,9 @@ public class User {
     private String email;
     //用户类型，普通用户/管理员
     private String userType;
+    //信誉分，初始为30
+    @Column(columnDefinition = "int default 30") // 设置默认值为30
+    private int credit;
 
     public String getuid() {
         return uid;

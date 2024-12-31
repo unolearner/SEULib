@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -93,7 +94,14 @@ public class BookController {
         Book book=elasticsearchService.searchBookById(request.getBookId());
         User user=userService.getUserById(request.getUserId());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        if(book.getStore()==0){//库存不足，进行预约，返回信息
+        //检查User信誉，信誉低于30不允许借
+        if(user.getCredit()<24){
+            return ResponseEntity.status(HttpStatus.CONFLICT).
+                    body(new MyErrorResponse("Out of credit","您的信誉不足，无法借阅"));
+        }
+
+        //库存不足，进行预约，返回信息
+        if(book.getStore()==0){
             Reservation reservation=new Reservation();
             reservation.setBid(request.getBookId());
             reservation.setReservationDate(LocalDateTime.now().format(formatter));
@@ -178,6 +186,11 @@ public class BookController {
         return ResponseEntity.ok(savedBook); // 返回保存后的书籍实体
     }
 
+    /**
+     * 还书，store++，留下记录
+     * @param request
+     * @return
+     */
     @PostMapping("/return")
     public ResponseEntity<?>returnBook(@RequestBody CommonRequest request) {
         Book book=elasticsearchService.searchBookById(request.getBookId());
@@ -192,5 +205,36 @@ public class BookController {
         record.setActionDate(LocalDateTime.now().format(formatter));
         recordDao.save(record);
         return ResponseEntity.ok("还书成功，书籍"+book.getBname()+"现存量为"+book.getStore());
+    }
+
+    /**
+     * 续借，允许一个月续借两次，续借前先查record检查有无一个月内两次的情况
+     * @return
+     */
+    @PostMapping("/reborrow")
+    public ResponseEntity<?>reBorrowBook(@RequestBody CommonRequest request){
+        User user=userService.getUserById(request.getUserId());
+        Book book=elasticsearchService.searchBookById(request.getBookId());
+        //检查User信誉，信誉低于30不允许续借
+        if(user.getCredit()<24){
+            return ResponseEntity.status(HttpStatus.CONFLICT).
+                    body(new MyErrorResponse("Out of credit","您的信誉不足，无法续借"));
+        }
+        //检查一个月内有无续借
+        LocalDate oneMonthAgo=LocalDate.now().minusMonths(1);
+        List<BookRecord> records=recordDao.findRecentOneMonthReBorrow(request.getUserId(),
+                String.valueOf(oneMonthAgo));
+        if(!records.isEmpty()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).
+                    body(new MyErrorResponse("Out of date","您本月已续借过，无法续借"));
+        }
+        //一切正常，进行续借，留下记录
+        BookRecord record=new BookRecord();
+        record.setBid(request.getBookId());
+        record.setUserId(request.getUserId());
+        record.setActionType(ActionType.REBORROW);
+        record.setActionDate(String.valueOf(LocalDate.now()));
+        recordDao.save(record);
+        return ResponseEntity.ok("续借成功，新的还书截止期限为："+LocalDate.now().plusMonths(1));
     }
 }
