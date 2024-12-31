@@ -22,10 +22,10 @@ public class Book {
     @jakarta.persistence.GeneratedValue(strategy = GenerationType.IDENTITY) // 自增主键
     private Long bid;
 
-    @Field(type = FieldType.Text) // 支持全文搜索
+    @Field(type = FieldType.Text,analyzer = "ik_max_word") // 支持全文搜索
     private String bname;
 
-    @Field(type = FieldType.Text) // 支持全文搜索
+    @Field(type = FieldType.Text,analyzer = "ik_max_word") // 支持全文搜索
     private String detail;
 
     @Field(type = FieldType.Keyword) // 精确匹配

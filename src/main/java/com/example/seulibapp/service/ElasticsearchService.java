@@ -9,7 +9,7 @@ import java.util.List;
 public interface ElasticsearchService {
 
     // 保存书籍到 Elasticsearch
-    void saveBook(Book book);
+    Book saveBook(Book book);
 
     //根据ID搜索书本
     Book searchBookById(Long id);
@@ -31,7 +31,7 @@ public interface ElasticsearchService {
 
 
     // 删除书籍
-    void deleteBook(Long bid);
+    boolean deleteBook(Long bid);
 
     // 从数据库获取书籍
     List<Book> getAllBooksFromDb();

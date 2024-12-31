@@ -26,4 +26,6 @@ public interface BookRepository extends ElasticsearchRepository<Book, Long> {
 
     // 按书名，作者，出版社，出版日期精确搜索书籍
     Book findByBnameAndAuthorAndPrinterAndDate(String bname, String author, String publisher,String date);
+
+
 }

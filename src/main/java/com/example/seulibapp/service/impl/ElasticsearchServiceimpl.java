@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -30,8 +31,9 @@ public class ElasticsearchServiceimpl implements ElasticsearchService {
 
 
     @Override
-    public void saveBook(Book book) {
+    public Book saveBook(Book book) {
         bookRepository.save(book);  // 保存书籍
+        return book;
     }
 
     @Override
@@ -70,8 +72,11 @@ public class ElasticsearchServiceimpl implements ElasticsearchService {
 
 
     @Override
-    public void deleteBook(Long bid) {
+    public boolean deleteBook(Long bid) {
         bookRepository.deleteById(bid);  // 删除书籍
+        Optional<Book> book = bookRepository.findById(bid);
+        return book.isEmpty();
+
     }
 
     @Override

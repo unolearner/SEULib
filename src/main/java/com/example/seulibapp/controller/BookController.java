@@ -23,12 +23,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
+import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -52,28 +56,56 @@ public class BookController {
 
     // 添加书籍
     @PostMapping("/add")
-    public void addBook(@RequestBody Book book) {
-        elasticsearchService.saveBook(book);  // 保存书籍
+    public ResponseEntity<Book> addBook(@RequestBody Book book) {
+        Book savedBook = elasticsearchService.saveBook(book);  // 保存书籍‘
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{bid}")  // 使用 bid 作为资源的标识符
+                .buildAndExpand(savedBook.getBid())  // 假设 book 对象中有 bid
+                .toUri();
+
+        return ResponseEntity.created(location)  // 返回 201 Created 状态码
+                .body(savedBook);  // 返回保存后的书籍对象
     }
 
     // 搜索书籍
     @GetMapping("/search")
-    public List<Book> searchBooks(@RequestParam String keyword) {
-        return elasticsearchService.searchBooksByName(keyword);  // Elasticsearch 搜索
+    public ResponseEntity<List<Book>> searchBooks(@RequestParam String keyword) {
+        List<Book> books = elasticsearchService.searchBooksByName(keyword);  // 使用 Elasticsearch 进行搜索
+
+        if (books.isEmpty()) {
+            return ResponseEntity.noContent().build();  // 如果没有找到书籍，返回 204 No Content
+        }
+
+        return ResponseEntity.ok(books);  // 返回 200 OK 和搜索结果
     }
 
     // 获取所有书籍
     @GetMapping("/all")
-    public Iterable<Book> getAllBooks() {
-        return elasticsearchService.getAllBooks();  // 获取所有书籍
+    public ResponseEntity<List<Book>> getAllBooks() {
+        Iterable<Book> booksIterable = elasticsearchService.getAllBooks();  // 获取所有书籍
+
+        List<Book> books = StreamSupport.stream(booksIterable.spliterator(), false)
+                .collect(Collectors.toList());  // 将 Iterable 转换为 List
+
+
+        if (books.isEmpty()) {
+            return ResponseEntity.noContent().build();  // 如果没有书籍，返回 204 No Content
+        }
+
+        return ResponseEntity.ok(books);  // 返回 200 OK 和书籍列表
     }
 
 
 
     // 删除书籍
     @DeleteMapping("/{bid}")
-    public void deleteBook(@PathVariable Long bid) {
-        elasticsearchService.deleteBook(bid);  // 删除书籍
+    public ResponseEntity<Void> deleteBook(@PathVariable Long bid) {
+        boolean isDeleted = elasticsearchService.deleteBook(bid);  // 删除书籍
+        if (isDeleted) {
+            return ResponseEntity.noContent().build();  // 删除成功，返回 204 No Content
+        } else {
+            return ResponseEntity.notFound().build();  // 删除失败（书籍不存在），返回 404 Not Found
+        }
     }
 
     /**
@@ -81,8 +113,14 @@ public class BookController {
      * @return 前十书籍的列表
      */
     @GetMapping("/top-books")
-    public List<Book> getTop10Books() {
-        return elasticsearchService.getTop10BooksBySales();
+    public ResponseEntity<List<Book>> getTop10Books() {
+        List<Book> topBooks = elasticsearchService.getTop10BooksBySales();  // 查询前十书籍
+
+        if (topBooks.isEmpty()) {
+            return ResponseEntity.noContent().build();  // 如果没有书籍，返回 204 No Content
+        }
+
+        return ResponseEntity.ok(topBooks);  // 返回 200 OK 和书籍列表
     }
 
     /**
@@ -132,21 +170,36 @@ public class BookController {
      * @return 相关信息？成功，或者失败
      */
     @PostMapping("/import")
-    public String importBooks(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> importBooks(@RequestParam("file") MultipartFile file) {
         try {
+            // 检查文件是否为空
+            if (file.isEmpty()) {
+                return ResponseEntity.badRequest().body("上传的文件为空");
+            }
+
             // 解析 Excel 文件
             List<Book> books = excelService.importBooksFromExcel(file);
-            System.out.println(books);
+            if (books.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("没有解析到书籍数据");
+            }
 
             // 将解析的书籍传递给 ElasticsearchService
             elasticsearchService.processImportedBooks(books);
 
-            System.out.println(books);
-            return "书籍导入成功，数量：" + books.size();
+            // 返回 200 OK 和成功信息
+            return ResponseEntity.ok("书籍导入成功，数量：" + books.size());
+
         } catch (IOException e) {
-            return "文件解析失败：" + e.getMessage();
+            // 返回 500 Internal Server Error 和错误信息
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("文件解析失败：" + e.getMessage());
         } catch (IllegalArgumentException e) {
-            return "文件类型错误：" + e.getMessage();
+            // 返回 400 Bad Request 和错误信息
+            return ResponseEntity.badRequest().body("文件类型错误：" + e.getMessage());
+        } catch (Exception e) {
+            // 处理其他任何未捕获的异常
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("系统错误：" + e.getMessage());
         }
     }
 
