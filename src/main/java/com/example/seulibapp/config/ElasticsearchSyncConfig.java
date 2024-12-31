@@ -22,11 +22,11 @@ public class ElasticsearchSyncConfig {
                                                      ElasticsearchService bookService,
                                                      RestClient restClient) {
         return args -> {
+            // Delete all books in Elasticsearch
+            elasticsearchSyncService.deleteAllBooksFromElasticsearch();
             // Configure the IK Analyzer for the "Book" index
             createIndexWithIKAnalyzer(restClient);
 
-            // Delete all books in Elasticsearch
-            elasticsearchSyncService.deleteAllBooksFromElasticsearch();
 
             // Get all books from the database
             List<Book> booksFromDb = bookService.getAllBooksFromDb();
@@ -38,7 +38,12 @@ public class ElasticsearchSyncConfig {
 
     private void createIndexWithIKAnalyzer(RestClient restClient) {
         try {
-            // Create the index settings with IK Analyzer
+            // 1. 删除已有的索引（如果已存在）
+            Request deleteRequest = new Request("DELETE", "/books");
+            Response deleteResponse = restClient.performRequest(deleteRequest);
+            System.out.println("Deleted existing index (if any): " + deleteResponse.getStatusLine());
+
+            // 2. 创建索引的设置（包括IK分词器）
             String settingsJson = "{\n" +
                     "  \"settings\": {\n" +
                     "    \"analysis\": {\n" +
@@ -60,15 +65,14 @@ public class ElasticsearchSyncConfig {
                     "  }\n" +
                     "}";
 
-            // Create index request with settings
-            Request request = new Request("PUT", "/book_index");
-            request.setJsonEntity(settingsJson);
+            // 3. 创建索引请求
+            Request createRequest = new Request("PUT", "/books");
+            createRequest.setJsonEntity(settingsJson);
 
-            // Send request to create the index
-            Response response = restClient.performRequest(request);
+            // 4. 发送请求以创建索引
+            Response createResponse = restClient.performRequest(createRequest);
+            System.out.println("Index creation response: " + createResponse.getStatusLine());
 
-            // Optionally log the response to verify index creation
-            System.out.println("Index creation response: " + response.getStatusLine());
         } catch (IOException e) {
             System.err.println("Error creating index with IK Analyzer: " + e.getMessage());
         }
