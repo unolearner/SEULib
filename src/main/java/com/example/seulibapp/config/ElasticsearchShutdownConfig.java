@@ -35,13 +35,35 @@ public class ElasticsearchShutdownConfig {
      */
     @EventListener(ContextClosedEvent.class)
     public void syncDataToDatabaseOnShutdown() {
-        // 清空数据库中的所有数据
-        bookDao.deleteAll();
-
-        // 分页查询 ES 中的数据
+        // 分页查询数据库中的所有书籍
         int pageSize = 1000;
         int page = 0;
         boolean hasNext = true;
+
+        while (hasNext) {
+            Pageable pageable = PageRequest.of(page, pageSize);
+            Page<Book> booksPage = bookDao.findAll(pageable);  // 从数据库中分页查询
+
+            List<Book> books = booksPage.getContent();
+            if (!books.isEmpty()) {
+                // 遍历每本书，检查ES中是否存在该书籍
+                for (Book book : books) {
+                    // 检查ES中是否存在该ID
+                    boolean existsInES = bookRepository.existsById(book.getBid());
+                    if (!existsInES) {
+                        // 如果ES中不存在该ID，删除数据库中的记录
+                        bookDao.deleteById(book.getBid());
+                    }
+                }
+                page++;
+            } else {
+                hasNext = false;
+            }
+        }
+
+        // 分页查询 ES 中的数据  检测新数据
+        page = 0;
+        hasNext = true;
 
         while (hasNext) {
             Pageable pageable = PageRequest.of(page, pageSize);
@@ -65,7 +87,7 @@ public class ElasticsearchShutdownConfig {
             }
         }
 
-        System.out.println("同步完成：所有数据已从ES同步到数据库");
+        System.out.println("同步完成：数据库中不存在的ES记录已从数据库中删除");
     }
 }
 
