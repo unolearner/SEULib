@@ -9,4 +9,5 @@ import java.util.List;
 @Repository("reservationRepository")
 public interface ReservationDao extends JpaRepository<Reservation, Long> {
     List<Reservation> findByBid(Long bookId);
+    List<Reservation> findByUserId(String userId);
 }

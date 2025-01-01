@@ -9,7 +9,6 @@ import java.time.format.DateTimeFormatter;
 /**
  * 用于前端展示record
  */
-@Entity
 @Data
 public class RecordVo extends BookRecord {
     private String bookName;
@@ -21,6 +20,8 @@ public class RecordVo extends BookRecord {
         this.userName = userName;
         this.bookName = bookName;
         this.setId(record.getId());
+        this.setBid(record.getBid());
+        this.setUserId(record.getUserId());
         this.setActionDate(record.getActionDate());
         this.setActionType(record.getActionType());
         // 定义日期格式
