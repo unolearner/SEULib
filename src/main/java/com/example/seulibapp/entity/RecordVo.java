@@ -27,7 +27,7 @@ public class RecordVo extends BookRecord {
         this.setActionType(record.getActionType());
         // 定义日期格式
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        if(this.getActionType() == ActionType.BORROW){
+        if(this.getActionType() == ActionType.BORROW || this.getActionType() == ActionType.REBORROW){
             this.setReturnDate(String.valueOf(LocalDate.parse(record.getActionDate(),formatter).
                     plusMonths(1)));
         }
