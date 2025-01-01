@@ -257,7 +257,11 @@ public class BookController {
         DateTimeFormatter formatter=DateTimeFormatter.ofPattern("yyyy-MM-dd");
         record.setActionDate(LocalDateTime.now().format(formatter));
         recordDao.save(record);
-        return ResponseEntity.ok("还书成功，书籍"+book.getBname()+"现存量为"+book.getStore());
+        //删除此前的借和续借
+        List<BookRecord>borrowAndReborrows=recordDao.findBeforeBorrowAndReborrow(request.getUserId(),
+                request.getBookId());
+        recordDao.deleteAll(borrowAndReborrows);
+        return ResponseEntity.ok("还书成功，书籍《"+book.getBname()+"》现存量为"+book.getStore());
     }
 
     /**

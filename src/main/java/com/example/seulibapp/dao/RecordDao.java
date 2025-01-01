@@ -18,4 +18,9 @@ public interface RecordDao extends JpaRepository<BookRecord, Long> {
             "AND r.actionType = 'REBORROW' AND r.actionDate >= :startDate")
     List<BookRecord>findRecentOneMonthReBorrow(@Param("userId") String userId,
                                            @Param("startDate")String startDate);
+
+    @Query("SELECT r FROM BookRecord r WHERE r.userId = :userId " +
+            "AND (r.actionType = 'REBORROW' OR r.actionType='BORROW') AND r.bid = :bookId")
+    List<BookRecord>findBeforeBorrowAndReborrow(@Param("userId") String userId,
+                                                @Param("bookId") long bookId);
 }
