@@ -1,5 +1,6 @@
 package com.example.seulibapp.entity;
 
+import com.example.seulibapp.myEnum.ActionType;
 import jakarta.persistence.Entity;
 import lombok.Data;
 
@@ -26,7 +27,14 @@ public class RecordVo extends BookRecord {
         this.setActionType(record.getActionType());
         // 定义日期格式
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        this.setReturnDate(String.valueOf(LocalDate.parse(record.getActionDate(),formatter).plusMonths(1)));
+        if(this.getActionType() == ActionType.BORROW){
+            this.setReturnDate(String.valueOf(LocalDate.parse(record.getActionDate(),formatter).
+                    plusMonths(1)));
+        }
+        if(this.getActionType()==ActionType.REBORROW){
+            this.setReturnDate(String.valueOf(LocalDate.parse(record.getActionDate(),formatter).
+                    plusMonths(2)));
+        }
     }
 
     public RecordVo() {
