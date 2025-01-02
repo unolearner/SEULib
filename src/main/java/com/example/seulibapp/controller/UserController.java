@@ -132,5 +132,73 @@ public class UserController {
         }
     }
 
+    @PostMapping("/changePwd")
+    public ResponseEntity<Map<String, Object>> changePwd(@RequestBody User user) {
+        try {
+            if (user == null || user.getEmail() == null || user.getUserName() == null || user.getPassword() == null) {
+                System.out.println("Invalid input data: " + user);
+                return new ResponseEntity<>(Collections.singletonMap("error", "Invalid input data"), HttpStatus.BAD_REQUEST);
+            }
 
+            // 检查缓存中的用户信息
+            User cachedUser = memcacheService.getFromCache(user.getUserName(), User.class);
+            if (cachedUser == null) {
+                return new ResponseEntity<>(Collections.singletonMap("error", "User not found"), HttpStatus.NOT_FOUND);
+            }
+
+            User fullUserInfo = userService.getUserByUsername(user.getUserName());
+            String storedPassword = fullUserInfo.getPassword();
+            if (storedPassword == null) {
+                return new ResponseEntity<>(Collections.singletonMap("error", "User not found"), HttpStatus.NOT_FOUND);
+            }
+
+            if (!storedPassword.equals(user.getPassword())) {
+                return new ResponseEntity<>(Collections.singletonMap("error", "Incorrect current password"), HttpStatus.UNAUTHORIZED);
+            }
+
+            fullUserInfo.setPassword(user.getPassword());
+            userService.updateUser(fullUserInfo); // 同时改了数据库和缓存
+
+            return new ResponseEntity<>(Collections.singletonMap("message", "Password updated successfully"), HttpStatus.OK);
+
+        } catch (Exception e) {
+            System.out.println("An error occurred while changing the password: " + e.getMessage());
+            return new ResponseEntity<>(Collections.singletonMap("error", "Internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/changeUserInfo")
+    public ResponseEntity<Map<String, Object>> changeUserInfo(@RequestBody User user) {
+        try {
+//            if (user == null || user.getEmail() == null || user.getUserName() == null || user.getPassword() == null) {
+//                System.out.println("Invalid input data: " + user);
+//                return new ResponseEntity<>(Collections.singletonMap("error", "Invalid input data"), HttpStatus.BAD_REQUEST);
+//            }
+//
+//            // 检查缓存中的用户信息
+//            User cachedUser = memcacheService.getFromCache(user.getUserName(), User.class);
+//            if (cachedUser == null) {
+//                return new ResponseEntity<>(Collections.singletonMap("error", "User not found"), HttpStatus.NOT_FOUND);
+//            }
+//
+//            User fullUserInfo = userService.getUserByUsername(user.getUserName());
+//            String storedPassword = fullUserInfo.getPassword();
+//            if (storedPassword == null) {
+//                return new ResponseEntity<>(Collections.singletonMap("error", "User not found"), HttpStatus.NOT_FOUND);
+//            }
+//
+//            if (!storedPassword.equals(user.getPassword())) {
+//                return new ResponseEntity<>(Collections.singletonMap("error", "Incorrect current password"), HttpStatus.UNAUTHORIZED);
+//            }
+//
+//            fullUserInfo.setPassword(user.getPassword());
+//            userService.updateUser(fullUserInfo); // 同时改了数据库和缓存
+
+            return new ResponseEntity<>(Collections.singletonMap("message", "User Infomation updated successfully"), HttpStatus.OK);
+
+        } catch (Exception e) {
+            System.out.println("An error occurred while changing the User Infomation: " + e.getMessage());
+            return new ResponseEntity<>(Collections.singletonMap("error", "Internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
