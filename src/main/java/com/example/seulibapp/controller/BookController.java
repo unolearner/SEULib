@@ -280,10 +280,10 @@ public class BookController {
         //检查一个月内有无续借
         LocalDate oneMonthAgo=LocalDate.now().minusMonths(1);
         List<BookRecord> records=recordDao.findRecentOneMonthReBorrow(request.getUserId(),
-                String.valueOf(oneMonthAgo));
+                String.valueOf(oneMonthAgo),request.getBookId());
         if(!records.isEmpty()){
             return ResponseEntity.status(HttpStatus.CONFLICT).
-                    body(new MyErrorResponse("Out of date","您本月已续借过，无法续借"));
+                    body(new MyErrorResponse("Out of date","您本月已续借过该书，无法继续续借"));
         }
         //一切正常，进行续借，留下记录
         BookRecord record=new BookRecord();
